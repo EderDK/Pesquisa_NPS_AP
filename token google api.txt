@@ -1,0 +1,3 @@
+id cliente: 90729907567-ed1q8epp7oetugpcs6sjsd0fa7sn14kg.apps.googleusercontent.com
+
+chave secreta: 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
