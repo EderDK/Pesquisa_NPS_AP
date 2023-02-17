@@ -7,9 +7,12 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import os.path
 import emoji
+from datetime import datetime
 
 
-def SheetsNPS(user_id, rating, option):
+
+
+def SheetsNPS(user_id, rating, option, data):
     # If modifying these scopes, delete the file token.json.
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     # The ID and range of a sample spreadsheet.
@@ -64,56 +67,64 @@ def SheetsNPS(user_id, rating, option):
             spreadsheetId=SAMPLE_SPREADSHEET_ID,
             range=SAMPLE_RANGE_NAME,
             valueInputOption="USER_ENTERED",
-            body={"values": [[user_id, rating, option]]}
+            body={"values": [[user_id, rating, option, data]]}
         ).execute()
         # print(row)
 
     except HttpError as err:
         print('A')
-        
 
-st.title('Pesquisa de Satisfação')
+st.markdown('<center><h1 style="font-size: 24pt; margin-bottom: 30px;">Pesquisa de Satisfação</h1></center>', unsafe_allow_html=True)
+
+data = datetime.today()
+data = data.strftime("%d/%m/%Y")
 
 # Adiciona campo de entrada para CPF, RG ou CNPJ
 user_id = st.text_input('Seu CPF, RG ou CNPJ')
 
-# Carregando as imagens
-imagem_feliz = Image.open("zzfeliz.png")
-imagem_triste = Image.open("zztriste.png")
+st.write('')
 
-# Definindo as opções
-opcoes = ["Feliz", "Triste"]
-
-# Inicializando a opção selecionada na sessão
-if "opcao_selecionada" not in st.session_state:
-    st.session_state.opcao_selecionada = None
-
-# Criando o botão com a imagem para a opção "Feliz"
-with st.container():
-    botao_feliz = st.image(imagem_feliz, width=100, output_format='PNG')
-    if botao_feliz.button("", key="Feliz"):
-        st.session_state.opcao_selecionada = "Feliz"
-
-# Criando o botão com a imagem para a opção "Triste"
-with st.container():
-    botao_triste = st.image(imagem_triste, width=100, output_format='PNG')
-    if botao_triste.button("", key="Triste"):
-        st.session_state.opcao_selecionada = "Triste"
-
-# Exibindo a opção selecionada
-option = st.session_state.opcao_selecionada
-
-submit_button = st.button('Enviar respostas')
 
 # Obtém as respostas da pesquisa do usuário
 rating = st.slider('De 0 a 10, qual é o seu nível de satisfação?', 0, 10)
 
-if submit_button:
+st.markdown('<center><h1 style="font-size: 18pt; ">Como foi sua experiência?</h1></center>', unsafe_allow_html=True)
+
+# Divide a tela em duas colunas para colocar os botões lado a lado
+_, _ , col1, col2, col3, _ , _ = st.columns([1.6, 1, 1.3, 1.5, 2, 1, 1])
+
+
+
+# Adiciona botões de "feliz" e "triste" em col1
+with col1:
+    option_feliz = st.button(emoji.emojize(':smiling_face_with_smiling_eyes: Feliz'), key='Feliz')
+
+# Adiciona um espaço em branco entre os botões
+st.write("")
+
+with col2:
+    option_neutro = st.button(emoji.emojize(':neutral_face: Neutro'), key='Neutra')
+
+with col3:
+    option_triste = st.button(emoji.emojize(':disappointed_face: Triste'), key='Triste')
+
+# Verifica qual botão foi clicado e atribui a opção correspondente
+if option_feliz:
+    option = 'Feliz'
+elif option_neutro:
+    option = 'Neutro'
+elif option_triste:
+    option = 'Triste'
+else:
+    option = None
+
+if option != None:
     if not user_id:
         st.warning('Por favor, informe seu CPF, RG ou CNPJ.')
-    elif not option:
+    elif not option_feliz and not option_triste and not option_neutro:
         st.warning('Por favor, selecione como você se sente.')
     else:
-        SheetsNPS(user_id, rating, option)
+        SheetsNPS(user_id, rating, option, data)
         st.success('As suas respostas foram enviadas com sucesso!')
+        # Conecta ao sheets e manda as respostas na planilha.
     
