@@ -11,9 +11,7 @@ import emoji
 from datetime import datetime
 
 
-
-
-def SheetsNPS(user_id, rating, option, data):
+def SheetsNPS(user_id, rating, option, data, hora):
     # If modifying these scopes, delete the file token.json.
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     # The ID and range of a sample spreadsheet.
@@ -68,7 +66,7 @@ def SheetsNPS(user_id, rating, option, data):
             spreadsheetId=SAMPLE_SPREADSHEET_ID,
             range=SAMPLE_RANGE_NAME,
             valueInputOption="USER_ENTERED",
-            body={"values": [[user_id, rating, option, data]]}
+            body={"values": [[user_id, rating, option, data, hora]]}
         ).execute()
         # print(row)
     except HttpError as err:
@@ -79,11 +77,11 @@ st.markdown('<center><h1 style="font-size: 24pt; margin-bottom: 30px;">Pesquisa 
 data = datetime.today()
 data = data.strftime("%d/%m/%Y")
 
+hora = datetime.now().strftime("%H:%M")
 # Adiciona campo de entrada para CPF, RG ou CNPJ
-user_id = st.text_input('Seu CPF, RG ou CNPJ')
+user_id = st.text_input('Seu CPF/CNPJ')
 
 st.write('')
-
 
 # Obtém as respostas da pesquisa do usuário
 rating = st.slider('De 0 a 10, qual é o seu nível de satisfação?', 0, 10)
@@ -92,8 +90,6 @@ st.markdown('<center><h1 style="font-size: 18pt; ">Como foi sua experiência?</h
 
 # Divide a tela em duas colunas para colocar os botões lado a lado
 _, _ , col1, col2, col3, _ , _ = st.columns([1.6, 1, 1.3, 1.5, 2, 1, 1])
-
-
 
 # Adiciona botões de "feliz" e "triste" em col1
 with col1:
@@ -124,9 +120,11 @@ if option != None:
     elif not option_feliz and not option_triste and not option_neutro:
         st.warning('Por favor, selecione como você se sente.')
     else:
-        SheetsNPS(user_id, rating, option, data)
+        SheetsNPS(user_id, rating, option, data, hora)
+        user_id = ""
         st.success('As suas respostas foram enviadas com sucesso!')
-        sleep(2)
+        sleep(3)
         st.experimental_rerun()
+        
         # Conecta ao sheets e manda as respostas na planilha.
     
