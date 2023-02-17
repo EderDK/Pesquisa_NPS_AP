@@ -6,6 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import os.path
+from time import sleep
 import emoji
 from datetime import datetime
 
@@ -70,7 +71,6 @@ def SheetsNPS(user_id, rating, option, data):
             body={"values": [[user_id, rating, option, data]]}
         ).execute()
         # print(row)
-
     except HttpError as err:
         print('A')
 
@@ -126,5 +126,7 @@ if option != None:
     else:
         SheetsNPS(user_id, rating, option, data)
         st.success('As suas respostas foram enviadas com sucesso!')
+        sleep(2)
+        st.experimental_rerun()
         # Conecta ao sheets e manda as respostas na planilha.
     
