@@ -123,7 +123,7 @@ if option != None:
         SheetsNPS(user_id, rating, option, data, hora)
         user_id = ""
         st.success('As suas respostas foram enviadas com sucesso!')
-        sleep(3)
+        sleep(2)
         st.experimental_rerun()
         
         # Conecta ao sheets e manda as respostas na planilha.
