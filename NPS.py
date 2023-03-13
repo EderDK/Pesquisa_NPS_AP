@@ -79,7 +79,7 @@ data = data.strftime("%d/%m/%Y")
 
 hora = datetime.now().strftime("%H:%M")
 # Adiciona campo de entrada para CPF, RG ou CNPJ
-user_id = st.text_input('Seu CPF/CNPJ', type="number")
+user_id = st.text_input('Seu CPF/CNPJ')
 
 st.write('')
 
@@ -123,7 +123,7 @@ if option != None:
         SheetsNPS(user_id, rating, option, data, hora)
         user_id = ""
         st.success('As suas respostas foram enviadas com sucesso!')
-        sleep(2)
+        sleep(3)
         st.experimental_rerun()
         
         # Conecta ao sheets e manda as respostas na planilha.
