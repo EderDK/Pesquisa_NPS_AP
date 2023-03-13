@@ -79,7 +79,7 @@ data = data.strftime("%d/%m/%Y")
 
 hora = datetime.now().strftime("%H:%M")
 # Adiciona campo de entrada para CPF, RG ou CNPJ
-user_id = st.text_input('Seu CPF/CNPJ')
+user_id = st.text_input('Seu CPF/CNPJ', type="number")
 
 st.write('')
 
