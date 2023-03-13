@@ -86,6 +86,7 @@ st.write('')
 # Obtém as respostas da pesquisa do usuário
 rating = st.slider('De 0 a 10, qual é o seu nível de satisfação?', 0, 10)
 
+
 st.markdown('<center><h1 style="font-size: 18pt; ">Como foi sua experiência?</h1></center>', unsafe_allow_html=True)
 
 # Divide a tela em duas colunas para colocar os botões lado a lado
